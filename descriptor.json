@@ -1,7 +1,7 @@
 {
   "name": "sample-trigger",
   "type": "flogo:trigger",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "title": "Sample Trigger",
   "description": "Sample Trigger",
   "homepage": "https://github.com/project-flogo/tree/master/examples/trigger",
