@@ -1,0 +1,140 @@
+{
+  "name": "sample-trigger",
+  "type": "flogo:trigger",
+  "version": "0.0.1",
+  "title": "Sample Trigger",
+  "description": "Sample Trigger",
+  "homepage": "https://github.com/project-flogo/tree/master/examples/trigger",
+  "settings": [
+    {
+      "name": "natsClusterUrls",
+      "type": "string",
+      "required": true,
+      "default": "nats://127.0.0.1:4222"
+    },
+    {
+      "name": "natsConnName",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "payloadFormat",
+      "type": "string",
+      "allowed": ["JSON", "CSV"],
+      "default": "JSON"
+    },
+    {
+      "name": "natsUserName",
+      "type": "string",
+      "decription": "NATS username",
+      "default": ""
+    },
+    {
+      "name": "natsUserPassword",
+      "type": "string",
+      "description": "NATS user password, required if username is defined",
+      "default": ""
+    },
+    {
+      "name": "natsToken",
+      "type": "string",
+      "description": "NATS token authentication",
+      "default": ""
+    },
+    {
+      "name": "natsNkeySeedfile",
+      "type": "string",
+      "description": "Seed file path to read NATS NKey seed",
+      "default": ""
+    },
+    {
+      "name": "natsCredentialFile",
+      "type": "string",
+      "description": "Credential file path for decentralized authentication based on JSON Web Tokens (JWT).",
+      "default": ""
+    },
+    {
+      "name": "autoReconnect",
+      "type": "boolean",
+      "description": "Enable NATS connection reconnect",
+      "default": true
+    }, 
+    {
+      "name": "maxReconnects",
+      "type": "integer",
+      "description": "Max Reconnect Attempts",
+      "default": 60
+    },
+    {
+      "name": "enableRandomReconnection",
+      "type": "boolean",
+      "description": "Disable randomize reconnection",
+      "default": false
+    },
+    {
+      "name": "reconnectWait",
+      "type": "integer",
+      "description": "Reconnect wait in seconds",
+      "default": 2
+    },
+    {
+      "name": "reconnectBufferSize",
+      "type": "integer",
+      "description": "Reconnect buffer size",
+      "default": 8388608
+    },
+    {
+      "name": "skipVerify",
+      "type": "boolean",
+      "description": "Skip SSL cert verification",
+      "default": false
+    },
+    {
+      "name": "caFile",
+      "type": "string",
+      "description": "CA root public key file",
+      "default": ""
+    },
+    {
+      "name": "certFile",
+      "type": "string",
+      "description": "Client cert file",
+      "default": ""
+    },
+    {
+      "name": "keyFile",
+      "type": "string",
+      "description": "Client key file",
+      "default": ""
+    },
+    {
+      "name": "protoName",
+      "type": "string",
+      "description": "Protobuf package name",
+      "default": ""
+    }
+  ],
+  "output": [
+    {
+      "name": "data",
+      "type": "object",
+      "description": "Incoming payload data"
+    }
+  ],
+  "reply": [
+    {
+      "name": "code",
+      "type": "integer"
+    },
+    {
+      "name": "data",
+      "type": "object",
+      "description": "Return data to requester"
+    }
+  ],
+  "handler": {
+    "settings": [
+      
+    ]
+  }
+}
