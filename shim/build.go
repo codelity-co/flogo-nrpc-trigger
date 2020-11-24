@@ -97,15 +97,17 @@ func (s *serviceImpl{{$protoName}}{{$serviceName}}{{$option}}) {{.MethodName}}(c
 	nrpcData := make(map[string]interface{})
 	nrpcData["methodName"] = methodName
 	nrpcData["serviceName"] = serviceName
-	nrpcData["contextdata"] = ctxMap
-	nrpcData["reqdata"] = reqMap
+	nrpcData["contextData"] = ctxMap
+	nrpcData["reqData"] = reqMap
 
 	s.handler.natsMsgChanngel <- nrpcData
-	replyData <- s.handler.natsMsgChanngel
+
+	var reply interface{}
+	reply <- s.handler.natsMsgChanngel
 
 	r := &{{.MethodResName}}{}
 
-	replyBytes, err := json.Marshal(replyData)
+	replyBytes, err := json.Marshal(reply.(*Reply).Data)
 	if err != nil {
 		return nil, err
 	}

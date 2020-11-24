@@ -116,9 +116,36 @@
   ],
   "output": [
     {
-      "name": "data",
+      "name": "serviceName",
+      "type": "string",
+      "description": "Service name"
+    },
+    {
+      "name": "methodName",
+      "type": "string",
+      "description": "Method name"
+    },
+    {
+      "name": "contextData",
       "type": "object",
-      "description": "Incoming payload data"
+      "description": "Context Data"
+    },
+    {
+      "name": "reqData",
+      "type": "object",
+      "description": "Request Data"
+    }
+  ],
+  "reply": [
+    {
+      "name": "code",
+      "type": "integer",
+      "description": "RPC return code"
+    },
+    {
+      "name": "data",
+      "type": "any",
+      "description": "RPC return data"
     }
   ]
 }

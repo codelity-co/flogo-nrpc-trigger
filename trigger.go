@@ -190,7 +190,14 @@ func (h *Handler) HandleMessage() {
 				continue
 			}
 			
-			h.natsMsgChannel <- result
+			r := &Reply{}
+			err = metadata.MapToStruct(result, r, true)
+			if err != nil {
+				h.logger.Errorf("Reply error: %v", err)
+				continue
+			}
+
+			h.natsMsgChannel <- r
 		}
 	}
 }
