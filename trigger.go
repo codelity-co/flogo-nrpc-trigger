@@ -19,7 +19,7 @@ import (
 	nats "github.com/nats-io/nats.go"
 )
 
-var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
+var triggerMd = trigger.NewMetadata(&Settings{}, &Output{})
 var resolver = resolve.NewCompositeResolver(map[string]resolve.Resolver{
 	".":        &resolve.ScopeResolver{},
 	"env":      &resolve.EnvResolver{},
@@ -69,17 +69,9 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	// Init handlers
 	for _, handler := range ctx.GetHandlers() {
 
-		hs := &HandlerSettings{}
-		err := metadata.MapToStruct(handler.Settings(), hs, true)
-		if err != nil {
-			return err
-		}
-		t.logger.Debug("Handler setting: %v", hs)
-
 		// Create Trigger Handler
 		natsHandler := &Handler{
 			triggerSettings: t.settings,
-			handlerSettings: hs,
 			logger:          t.logger,
 			stopChannel: make(chan bool),
 			triggerHandler:  handler,
@@ -146,10 +138,9 @@ func (t *Trigger) Stop() error {
 // Handler is a NATS subject handler
 type Handler struct {
 	triggerSettings  *Settings
-	handlerSettings  *HandlerSettings
 	logger           log.Logger
 	natsConn         *nats.Conn
-	natsMsgChannel   chan map[string]interface{}
+	natsMsgChannel   chan interface{}
 	natsSubscription *nats.Subscription
 	stopChannel      chan bool
 	triggerHandler   trigger.Handler
@@ -166,7 +157,7 @@ func (h *Handler) getConnection() error {
 	}
 	h.natsConn = nc
 	h.logger.Infof("Got NATS connection")
-	h.natsMsgChannel = make(chan map[string]interface{}) // Create NATS message channel
+	h.natsMsgChannel = make(chan interface{}) // Create NATS message channel
 	return nil
 }
 
@@ -190,16 +181,15 @@ func (h *Handler) HandleMessage() {
 			)
 
 			out := &Output{
-				Data: nrpcData,
+				Data: nrpcData.(map[string]interface{}),
 			}
 
-			var result map[string]interface{}
-			result, err = h.triggerHandler.Handle(context.Background(), out)
+			result, err := h.triggerHandler.Handle(context.Background(), out)
 			if err != nil {
 				h.logger.Errorf("Trigger handler error: %v", err)
 				continue
 			}
-		
+			
 			h.natsMsgChannel <- result
 		}
 	}
