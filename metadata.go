@@ -25,7 +25,7 @@ type Settings struct {
 	EnableStreaming          bool   `md:"enableStreaming"`
 	StanClusterID            string `md:"stanClusterID"`
 	ProtoName                string `md:"protoName"`
-	ProtoFile                stirng `md:"protoFile"`
+	ProtoFile                string `md:"protoFile"`
 }
 
 // FromMap method of Settings
