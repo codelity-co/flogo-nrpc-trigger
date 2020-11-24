@@ -18,12 +18,6 @@
       "default": ""
     },
     {
-      "name": "payloadFormat",
-      "type": "string",
-      "allowed": ["JSON", "CSV"],
-      "default": "JSON"
-    },
-    {
       "name": "natsUserName",
       "type": "string",
       "decription": "NATS username",
