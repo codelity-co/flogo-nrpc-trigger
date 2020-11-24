@@ -285,7 +285,6 @@ func generatePbFiles() error {
 	}
 
 	// execute protoc command
-	// err = Exec("protoc", "-I", appPath, protoPath, "--go_out=plugins=grpc,import_path=main:"+appPath)
 	err = Exec("protoc", "-I", appPath, protoPath, "--go_out="+appPath)
 	if err != nil {
 		return err
@@ -301,7 +300,6 @@ func generateNrpcFiles() error {
 	}
 
 	// execute protoc command
-	// err = Exec("protoc", "-I", appPath, protoPath, "--go_out=plugins=grpc,import_path=main:"+appPath)
 	err = Exec("protoc", "-I", appPath, protoPath, "--nrpc_out="+appPath)
 	if err != nil {
 		return err

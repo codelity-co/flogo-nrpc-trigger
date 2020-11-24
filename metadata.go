@@ -8,7 +8,6 @@ import (
 type Settings struct {
 	NatsClusterUrls          string `md:"natsClusterUrls,required"`
 	NatsConnName             string `md:"natsConnName"`
-	PayloadFormat						 string `md:"payloadFormat"`
 	NatsUserName             string `md:"natsUserName"`
 	NatsUserPassword         string `md:"natsUserPassword"`
 	NatsToken                string `md:"natsToken"`
@@ -18,14 +17,15 @@ type Settings struct {
 	MaxReconnects            int    `md:"maxReconnects"`
 	EnableRandomReconnection bool   `md:"enableRandomReconnection"`
 	ReconnectWait            int    `md:"reconnectWait"`
-	ReconnectBufferSize      int  `md:"reconnectBufferSize"`
+	ReconnectBufferSize      int    `md:"reconnectBufferSize"`
 	SkipVerify               bool   `md:"skipVerify"`
 	CaFile                   string `md:"caFile"`
 	CertFile                 string `md:"certFile"`
 	KeyFile                  string `md:"keyFile"`
 	EnableStreaming          bool   `md:"enableStreaming"`
 	StanClusterID            string `md:"stanClusterID"`
-	ProtoName								 string `md:"protoName"`
+	ProtoName                string `md:"protoName"`
+	ProtoFile                stirng `md:"protoFile"`
 }
 
 // FromMap method of Settings
@@ -40,11 +40,6 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 	}
 
 	s.NatsConnName, err = coerce.ToString(values["natsConnName"])
-	if err != nil {
-		return err
-	}
-
-	s.PayloadFormat, err = coerce.ToString(values["payloadFormat"])
 	if err != nil {
 		return err
 	}
@@ -134,6 +129,10 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 		return err
 	}
 
+	s.ProtoFile, err = coerce.ToString(values["protoFile"])
+	if err != nil {
+		return err
+	}
 	return nil
 
 }
@@ -142,26 +141,26 @@ func (s *Settings) FromMap(values map[string]interface{}) error {
 func (s *Settings) ToMap() map[string]interface{} {
 
 	return map[string]interface{}{
-		"natsClusterUrls": s.NatsClusterUrls,
-		"natsConnName":    s.NatsConnName,
-		"payloadFormat":    s.PayloadFormat,
-		"natsUserName": s.NatsUserName,
-		"natsUserPassword": s.NatsUserPassword,
-		"natsToken": s.NatsToken,
-		"natsNkeySeedfile": s.NatsNkeySeedfile,
-		"natsCredentialFile": s.NatsNkeySeedfile,
-		"autoReconnect": s.AutoReconnect,
-		"maxReconnects": s.MaxReconnects,
+		"natsClusterUrls":          s.NatsClusterUrls,
+		"natsConnName":             s.NatsConnName,
+		"natsUserName":             s.NatsUserName,
+		"natsUserPassword":         s.NatsUserPassword,
+		"natsToken":                s.NatsToken,
+		"natsNkeySeedfile":         s.NatsNkeySeedfile,
+		"natsCredentialFile":       s.NatsNkeySeedfile,
+		"autoReconnect":            s.AutoReconnect,
+		"maxReconnects":            s.MaxReconnects,
 		"enableRandomReconnection": s.EnableRandomReconnection,
-		"reconnectWait": s.ReconnectWait,
-		"reconnectBufferSize": s.ReconnectBufferSize,
-		"skipVerify": s.SkipVerify,
-		"caFile": s.CaFile,
-		"certFile": s.CertFile,
-		"keyFile": s.KeyFile,
-		"enableStreaming": s.EnableStreaming,
-		"stanClusterID": s.StanClusterID,
-		"protoName": s.ProtoName,
+		"reconnectWait":            s.ReconnectWait,
+		"reconnectBufferSize":      s.ReconnectBufferSize,
+		"skipVerify":               s.SkipVerify,
+		"caFile":                   s.CaFile,
+		"certFile":                 s.CertFile,
+		"keyFile":                  s.KeyFile,
+		"enableStreaming":          s.EnableStreaming,
+		"stanClusterID":            s.StanClusterID,
+		"protoName":                s.ProtoName,
+		"protoFile":                s.ProtoFile,
 	}
 
 }
@@ -172,7 +171,7 @@ type Output struct {
 
 func (o *Output) FromMap(values map[string]interface{}) error {
 	var err error
-	
+
 	o.Data, err = coerce.ToObject(values["data"])
 	if err != nil {
 		return err
@@ -188,13 +187,13 @@ func (o *Output) ToMap() map[string]interface{} {
 }
 
 type Reply struct {
-	Code int `md:"code"`
+	Code int         `md:"code"`
 	Data interface{} `md:"data"`
 }
 
 func (r *Reply) FromMap(values map[string]interface{}) error {
 	var err error
-	
+
 	r.Code, err = coerce.ToInt(values["code"])
 	if err != nil {
 		return err
@@ -214,4 +213,3 @@ func (r *Reply) ToMap() map[string]interface{} {
 		"data": r.Data,
 	}
 }
-
