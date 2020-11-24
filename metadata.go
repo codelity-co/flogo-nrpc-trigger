@@ -166,9 +166,6 @@ func (s *Settings) ToMap() map[string]interface{} {
 
 }
 
-type HandlerSettings struct {
-}
-
 type Output struct {
 	Data map[string]interface{} `md:"data"`
 }
@@ -190,30 +187,4 @@ func (o *Output) ToMap() map[string]interface{} {
 	}
 }
 
-type Reply struct {
-	Code int `md:"code"`
-	Data map[string]interface{} `md:"data"`
-}
 
-func (r *Reply) FromMap(values map[string]interface{}) error {
-	var err error
-
-	r.Code, err = coerce.ToInt(values["code"])
-	if err != nil {
-		return err
-	}
-
-	r.Data, err = coerce.ToObject(values["data"])
-	if err != nil {
-		return err
-	}
-	
-	return nil
-}
-
-func (r *Reply) ToMap() map[string]interface{} {
-	return map[string]interface{}{
-		"code": r.Code,
-		"data": r.Data,
-	}
-}

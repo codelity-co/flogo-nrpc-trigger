@@ -120,21 +120,5 @@
       "type": "object",
       "description": "Incoming payload data"
     }
-  ],
-  "reply": [
-    {
-      "name": "code",
-      "type": "integer"
-    },
-    {
-      "name": "data",
-      "type": "object",
-      "description": "Return data to requester"
-    }
-  ],
-  "handler": {
-    "settings": [
-      
-    ]
-  }
+  ]
 }
