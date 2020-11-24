@@ -43,7 +43,12 @@ type Trigger struct {
 
 func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	s := &Settings{}
-	err := metadata.MapToStruct(config.Settings, s, true)
+	sMap, err := resolveObject(config.Settings)
+	if err != nil {
+		return nil, err
+	}
+
+	err = metadata.MapToStruct(sMap, s, true)
 	if err != nil {
 		return nil, err
 	}
@@ -52,11 +57,6 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 }
 
 func (f *Factory) Metadata() *trigger.Metadata {
-	return triggerMd
-}
-
-// Metadata implements trigger.Trigger.Metadata
-func (t *Trigger) Metadata() *trigger.Metadata {
 	return triggerMd
 }
 
