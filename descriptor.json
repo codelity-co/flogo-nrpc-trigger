@@ -1,7 +1,7 @@
 {
   "name": "flogo-nrpc-trigger",
   "type": "flogo:trigger",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "title": "Codelity Flogo nRPC Trigger",
   "description": "Sample Trigger",
   "homepage": "https://github.com/project-flogo/tree/master/examples/trigger",
