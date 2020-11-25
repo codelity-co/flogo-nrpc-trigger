@@ -248,13 +248,13 @@ func GenerateSupportFiles(path string) error {
 	pdArr = arrangeProtoData(pdArr)
 
 	log.Println("Creating trigger support files...")
-	err = generateServiceImplFile(pdArr, "server")
+	err = generateServiceImplFile(pdArr, "nrpcserver")
 	if err != nil {
 		return err
 	}
 
 	// fmt.Println("Creating client support files...")
-	// err = generateServiceImplFile(pdArr, "client")
+	// err = generateServiceImplFile(pdArr, "nrpcclient")
 	// if err != nil {
 	// 	return err
 	// }
