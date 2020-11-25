@@ -26,10 +26,11 @@ package {{.Package}}
 
 import (
 	{{if .UnaryMethodInfo}}
+	"context"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strings"
-	"golang.org/x/net/context"
 	{{end}}
 	flogoTrigger "github.com/codelity-co/flogo-nrpc-trigger"
 )
@@ -74,37 +75,22 @@ func (s *serviceImpl{{$protoName}}{{$serviceName}}{{$option}}) {{.MethodName}}(c
 	methodName := "{{.MethodName}}"
 	serviceName := "{{$serviceName}}"
 
-	var ctxMap map[string]interface{}
-	ctxBytes, err := json.Marshal(ctx)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(ctxBytes, &ctxMap)
-	if err != nil {
-		return nil, err
-	}
-
-	var reqMap map[string]interface{}
-	reqBytes, err := json.Marshal(req)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(reqBytes, &reqMap)
-	if err != nil {
-		return nil, err
-	}
-
 	nrpcData := make(map[string]interface{})
 	nrpcData["methodName"] = methodName
 	nrpcData["serviceName"] = serviceName
-	nrpcData["contextData"] = ctxMap
-	nrpcData["reqData"] = reqMap
+	nrpcData["contextData"] = ctx
+	nrpcData["reqData"] = req
 
 	s.handler.natsMsgChanngel <- nrpcData
 
 	var reply interface{}
 	reply <- s.handler.natsMsgChanngel
 
+	rType := refect.ValueOf(reply).Type()
+	if rType  == error {
+		return nil, reply
+	}
+	
 	r := &{{.MethodResName}}{}
 
 	replyBytes, err := json.Marshal(reply.(*Reply).Data)
