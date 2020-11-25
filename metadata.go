@@ -173,7 +173,12 @@ type Output struct {
 func (o *Output) FromMap(values map[string]interface{}) error {
 	var err error
 
-	o.Data, err = coerce.ToObject(values["data"])
+	o.NrpcData, err = coerce.ToObject(values["nrpcData"])
+	if err != nil {
+		return err
+	}
+
+	o.ProtobufRequestMap, err = coerce.ToObject(values["protobufRequestMap"])
 	if err != nil {
 		return err
 	}
@@ -183,7 +188,8 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 
 func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"data": o.Data,
+		"nrpcData": o.NrpcData,
+		"protobufRequestMap": o.ProtobufRequestMap,
 	}
 }
 
