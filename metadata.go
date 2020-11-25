@@ -166,7 +166,8 @@ func (s *Settings) ToMap() map[string]interface{} {
 }
 
 type Output struct {
-	Data map[string]interface{} `md:"data"`
+	NrpcData map[string]interface{} `md:"nrpcData"`
+	ProtobufRequestMap map[string]interface{} `md:"protobufRequestMap"`
 }
 
 func (o *Output) FromMap(values map[string]interface{}) error {

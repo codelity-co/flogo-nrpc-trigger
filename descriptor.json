@@ -1,7 +1,7 @@
 {
   "name": "flogo-nrpc-trigger",
   "type": "flogo:trigger",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "title": "Codelity Flogo nRPC Trigger",
   "description": "Sample Trigger",
   "homepage": "https://github.com/project-flogo/tree/master/examples/trigger",
@@ -120,14 +120,14 @@
       "description": "Method name"
     },
     {
-      "name": "contextData",
+      "name": "nrpcData",
       "type": "object",
-      "description": "Context Data"
+      "description": "NRPC Data"
     },
     {
-      "name": "reqData",
+      "name": "protobufRequestMap",
       "type": "object",
-      "description": "Request Data"
+      "description": "Protobuf Request Map"
     }
   ],
   "reply": [

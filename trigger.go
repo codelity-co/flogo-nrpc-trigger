@@ -3,6 +3,7 @@ package nrpc
 import (
 	"context"
 	"crypto/tls"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -175,17 +176,35 @@ func (h *Handler) HandleMessage() {
 
 		case nrpcData := <-h.natsMsgChannel: // Receive NATS Msg from NATS message channel
 
+		  nrpcMap := nrpcData.(map[string]interface{})
 			var (
 				err error
-				// results map[string]interface{}
+				content map[string]interface{}
 			)
 
+			// assign req data content to trigger content
+			dataBytes, err := json.Marshal(nrpcMap["reqData"])
+			if err != nil {
+				h.natsMsgChannel <- err
+				h.logger.Error("Marshal failed on grpc request data")
+				continue
+			}
+
+			err = json.Unmarshal(dataBytes, &content)
+			if err != nil {
+				h.natsMsgChannel <- err
+				h.logger.Error("Unmarshal failed on grpc request data")
+				continue
+			}
+
 			out := &Output{
-				Data: nrpcData.(map[string]interface{}),
+				NrpcData: nrpcMap,
+				ProtobufRequestMap: content,
 			}
 
 			result, err := h.triggerHandler.Handle(context.Background(), out)
 			if err != nil {
+				h.natsMsgChannel <- err
 				h.logger.Errorf("Trigger handler error: %v", err)
 				continue
 			}
@@ -193,6 +212,7 @@ func (h *Handler) HandleMessage() {
 			r := &Reply{}
 			err = metadata.MapToStruct(result, r, true)
 			if err != nil {
+				h.natsMsgChannel <- err
 				h.logger.Errorf("Reply error: %v", err)
 				continue
 			}
