@@ -28,9 +28,6 @@ import (
 	{{if .UnaryMethodInfo}}
 	"context"
 	"encoding/json"
-	"fmt"
-	"reflect"
-	"strings"
 	{{end}}
 	flogoTrigger "github.com/codelity-co/flogo-nrpc-trigger"
 )
@@ -51,7 +48,7 @@ var serviceInfo{{$protoName}}{{$serviceName}}{{$option}} = &servInfo.ServiceInfo
 
 func init() {
 	flogoTrigger.ServiceRegistery.RegisterServerService(&serviceImpl{{$protoName}}{{$serviceName}}{{$option}}{
-		serviceInfo: serviceInfo{{$protoName}}{{$serviceName}}{{$option}}
+		serviceInfo: serviceInfo{{$protoName}}{{$serviceName}}{{$option}},
 	})
 }
 
@@ -226,18 +223,6 @@ func main() {
 // GenerateSupportFiles creates auto genearted code
 func GenerateSupportFiles(path string) error {
 
-	log.Println("Generating pb files...")
-	err := generatePbFiles()
-	if err != nil {
-		return err
-	}
-
-	log.Println("Generating nrpc files...")
-	err = generateNrpcFiles()
-	if err != nil {
-		return err
-	}
-
 	log.Println("Getting proto data...")
 	pdArr, err := getProtoData()
 	if err != nil {
@@ -260,36 +245,6 @@ func GenerateSupportFiles(path string) error {
 	// }
 
 	log.Println("Support files created.")
-	return nil
-}
-
-// generatePbFiles generates stub file based on given proto
-func generatePbFiles() error {
-	_, err := exec.LookPath("protoc")
-	if err != nil {
-		return fmt.Errorf("Protoc is not available: %s", err.Error())
-	}
-
-	// execute protoc command
-	err = Exec("protoc", "-I", appPath, protoPath, "--go_out="+appPath)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// generatePbFiles generates stub file based on given proto
-func generateNrpcFiles() error {
-	_, err := exec.LookPath("protoc")
-	if err != nil {
-		return fmt.Errorf("Protoc is not available: %s", err.Error())
-	}
-
-	// execute protoc command
-	err = Exec("protoc", "-I", appPath, protoPath, "--nrpc_out="+appPath)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
